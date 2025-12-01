@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FATEC MasterClass</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Babel para traduzir o React no navegador -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        /* Ajustes finos de scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div id="root"></div>
+
+    <!-- Script Principal -->
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect } from 'https://esm.sh/react@18.2.0';
+        import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
+        import { 
+            BookOpen, Beaker, Calculator, Globe, PenTool, Brain, 
+            ChevronRight, Menu, X, Award, CheckCircle, AlertCircle,
+            Lightbulb, ArrowRight, RotateCw, Search, GraduationCap,
+            TrendingUp, AlertTriangle, Bookmark
+        } from 'https://esm.sh/lucide-react@0.263.1';
+
+        // --- INÍCIO DO CÓDIGO REACT ---
+
+        const SectionTitle = ({ children }) => (
+            <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 border-b pb-2 border-gray-200">
+                {children}
+            </h3>
+        );
+
+        const SubTitle = ({ children }) => (
+            <h4 className="text-lg font-bold text-gray-700 mt-6 mb-2 flex items-center">
+                <div className="w-2 h-6 bg-blue-600 mr-2 rounded"></div>
+                {children}
+            </h4>
+        );
+
+        const Paragraph = ({ children }) => (
+            <p className="text-gray-700 leading-relaxed mb-4 text-justify">
+                {children}
+            </p>
+        );
+
+        const FormulaBox = ({ title, formula, legend }) => (
+            <div className="my-6 bg-slate-800 text-white p-4 rounded-lg shadow-lg border-l-4 border-yellow-400">
+                <div className="text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">{title}</div>
+                <div className="text-xl md:text-2xl font-mono text-center my-2 font-bold tracking-widest text-yellow-400">
+                {formula}
+                </div>
+                {legend && <div className="text-xs text-gray-400 mt-2 border-t border-gray-600 pt-2">{legend}</div>}
+            </div>
+        );
+
+        const FatecTrap = ({ children }) => (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-4 flex items-start">
+                <AlertTriangle className="text-red-500 w-6 h-6 mr-3 flex-shrink-0 mt-1" />
+                <div>
+                <strong className="block text-red-800 text-sm font-bold uppercase mb-1">Pegadinha da FATEC</strong>
+                <p className="text-red-700 text-sm">{children}</p>
+                </div>
+            </div>
+        );
+
+        const ConceptBox = ({ title, children, color = "blue" }) => {
+            const colors = {
+                blue: "bg-blue-50 border-blue-200 text-blue-900",
+                green: "bg-green-50 border-green-200 text-green-900",
+                amber: "bg-amber-50 border-amber-200 text-amber-900",
+            };
+            return (
+                <div className={`p-4 rounded-lg border ${colors[color]} my-4`}>
+                {title && <strong className="block font-bold mb-2">{title}</strong>}
+                <div className="text-sm leading-relaxed">{children}</div>
+                </div>
+            );
+        };
+
+        const subjects = {
+            portugues: {
+                title: "Português, Lit. e Interpretação",
+                icon: <BookOpen className="w-5 h-5" />,
+                color: "bg-blue-600",
+                modules: [
+                {
+                    title: "Interpretação e Figuras",
+                    content: (
+                    <div>
+                        <SectionTitle>Interpretação de Texto e Figuras de Linguagem</SectionTitle>
+                        <Paragraph>
+                        A prova da FATEC é composta 50% por interpretação. Não basta ler, é preciso inferir. O uso de figuras de linguagem é constante nas questões de literatura e tirinhas.
+                        </Paragraph>
+                        
+                        <SubTitle>Figuras de Palavra (Semântica)</SubTitle>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ConceptBox title="Metáfora vs. Comparação" color="blue">
+                            <ul className="list-disc pl-4 space-y-2">
+                            <li><strong>Metáfora:</strong> Afirmação direta. <em>"Ela é uma flor."</em></li>
+                            <li><strong>Comparação:</strong> Usa conectivos (como, tal qual). <em>"Ela é bonita <strong>como</strong> uma flor."</em></li>
+                            </ul>
+                        </ConceptBox>
+                        <ConceptBox title="Metonímia" color="blue">
+                            Substituição lógica. Parte pelo todo, autor pela obra.
+                            <br/><em>"Li Machado de Assis."</em> (Li a obra, não o homem).
+                            <br/><em>"Bebi dois copos."</em> (O líquido, não o vidro).
+                        </ConceptBox>
+                        </div>
+
+                        <SubTitle>Figuras de Pensamento</SubTitle>
+                        <ul className="space-y-3 mt-2 text-gray-700">
+                        <li className="bg-white p-3 border rounded shadow-sm">
+                            <strong>Antítese:</strong> Oposição de ideias. <em>"Amor e ódio caminham juntos."</em>
+                        </li>
+                        <li className="bg-white p-3 border rounded shadow-sm">
+                            <strong>Paradoxo (Oxímoro):</strong> Oposição impossível/ilógica. <em>"Ferida que dói e não se sente."</em>
+                        </li>
+                        <li className="bg-white p-3 border rounded shadow-sm">
+                            <strong>Ironia:</strong> Dizer o oposto do que se pensa.
+                        </li>
+                        </ul>
+
+                        <FatecTrap>
+                        A FATEC adora confundir <strong>Antítese</strong> com <strong>Paradoxo</strong>. Lembre-se: Antítese são opostos que coexistem (Dia/Noite). Paradoxo é uma contradição que anula a lógica (Fogo que arde sem se ver).
+                        </FatecTrap>
+                    </div>
+                    )
+                },
+                {
+                    title: "Modernismo Brasileiro",
+                    content: (
+                    <div>
+                        <SectionTitle>O Modernismo (1922 - 1945+)</SectionTitle>
+                        <Paragraph>
+                        É o movimento literário mais cobrado. Nasceu da necessidade de romper com o academicismo e buscar uma identidade nacional verdadeira.
+                        </Paragraph>
+
+                        <SubTitle>1ª Geração (1922-1930): A Fase Heroica</SubTitle>
+                        <Paragraph>Caracterizada pela destruição do passado, piada, paródia e nacionalismo crítico.</Paragraph>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                        <div className="p-3 bg-gray-100 rounded">
+                            <strong>Oswald de Andrade:</strong> Radical, Manifesto Antropofágico (Devorar a cultura estrangeira e criar a brasileira). Poesia "Pílula".
+                        </div>
+                        <div className="p-3 bg-gray-100 rounded">
+                            <strong>Mário de Andrade:</strong> "Macunaíma" (O herói sem nenhum caráter). Pesquisador do folclore.
+                        </div>
+                        </div>
+
+                        <SubTitle>2ª Geração (1930-1945): A Consolidação</SubTitle>
+                        <Paragraph>Maturidade. Divide-se em Poesia (filosófica/social) e Prosa (Regionalismo de 30).</Paragraph>
+                        <ConceptBox title="O Romance de 30 (Nordestino)" color="amber">
+                        Denúncia social, seca, miséria e coronelismo.
+                        <ul className="list-disc pl-4 mt-2">
+                            <li><strong>Graciliano Ramos:</strong> "Vidas Secas" (Análise psicológica, zoomorfização).</li>
+                            <li><strong>Jorge Amado:</strong> "Capitães da Areia" (Meninos de rua de Salvador).</li>
+                            <li><strong>Rachel de Queiroz:</strong> "O Quinze".</li>
+                        </ul>
+                        </ConceptBox>
+
+                        <SubTitle>3ª Geração (1945...): Geração de 45</SubTitle>
+                        <Paragraph>Volta ao rigor formal, linguagem experimental e sondagem psicológica profunda.</Paragraph>
+                        <ul className="list-disc pl-5 space-y-2">
+                        <li><strong>Guimarães Rosa:</strong> "Grande Sertão: Veredas". Recriação da linguagem, neologismos, o sertão como o mundo.</li>
+                        <li><strong>Clarice Lispector:</strong> "A Hora da Estrela". Epifania, fluxo de consciência, olhar para dentro.</li>
+                        </ul>
+                    </div>
+                    )
+                },
+                {
+                    title: "Gramática Essencial",
+                    content: (
+                    <div>
+                        <SectionTitle>Gramática: Concordância e Crase</SectionTitle>
+                        
+                        <SubTitle>Crase: Onde usar?</SubTitle>
+                        <Paragraph>Fusão da preposição 'a' + artigo 'a'.</Paragraph>
+                        <ul className="list-decimal pl-5 space-y-2 bg-blue-50 p-4 rounded text-blue-900">
+                        <li>Diante de palavras femininas (substitua por masculina, se der "ao", tem crase).</li>
+                        <li>Indicação de horas exatas (às 14h).</li>
+                        <li>Locuções adverbiais femininas (às pressas, à noite).</li>
+                        <li>Palavra "moda" implícita (Bife à [moda] milanesa).</li>
+                        </ul>
+
+                        <FatecTrap>
+                        <strong>Nunca ocorre crase:</strong> Antes de verbo (a partir), palavras masculinas (a pé, a prazo), pronomes pessoais (a ela, a mim).
+                        </FatecTrap>
+
+                        <SubTitle>Concordância Verbal (Casos Especiais)</SubTitle>
+                        <div className="space-y-3">
+                        <div className="border-l-4 border-green-500 pl-3">
+                            <strong>Verbo Haver:</strong> No sentido de existir, é IMPESSOAL. Fica sempre no singular.<br/>
+                            <em>"Havia muitas pessoas" (e não 'haviam').</em>
+                        </div>
+                        <div className="border-l-4 border-green-500 pl-3">
+                            <strong>Verbo Fazer:</strong> Indicando tempo decorrido, é singular.<br/>
+                            <em>"Faz dois anos que não te vejo" (e não 'fazem').</em>
+                        </div>
+                        <div className="border-l-4 border-green-500 pl-3">
+                            <strong>Partícula SE (Apassivadora vs. Indeterminação):</strong><br/>
+                            <em>"Vendem-se casas"</em> (Casas são vendidas - Plural).<br/>
+                            <em>"Precisa-se de operários"</em> (Quem precisa, precisa DE algo - Singular, sujeito indeterminado).
+                        </div>
+                        </div>
+                    </div>
+                    )
+                }
+                ]
+            },
+            matematica: {
+                title: "Matemática e Raciocínio",
+                icon: <Calculator className="w-5 h-5" />,
+                color: "bg-red-600",
+                modules: [
+                {
+                    title: "Matemática Básica e Financeira",
+                    content: (
+                    <div>
+                        <SectionTitle>Porcentagem e Regra de Três</SectionTitle>
+                        <Paragraph>A base de 30% da prova de exatas da FATEC.</Paragraph>
+
+                        <SubTitle>Regra de Três Composta</SubTitle>
+                        <Paragraph>Analise sempre se as grandezas são <strong>Diretamente</strong> ou <strong>Inversamente</strong> proporcionais.</Paragraph>
+                        <ConceptBox title="Exemplo Clássico" color="blue">
+                        Se 4 pedreiros constroem um muro em 6 dias, 8 pedreiros farão em quanto tempo?
+                        <br/><strong>Análise:</strong> Mais pedreiros = Menos tempo (Inversamente).
+                        <br/><strong>Cálculo:</strong> 4/8 = x/6 (inverte a base) &rarr; 4/8 = x/6 &rarr; 8x = 24 &rarr; x = 3 dias.
+                        </ConceptBox>
+
+                        <SubTitle>Juros Simples vs. Compostos</SubTitle>
+                        <FormulaBox 
+                        title="Juros Simples" 
+                        formula="J = C . i . t" 
+                        legend="J: Juros | C: Capital | i: taxa (decimal) | t: tempo"
+                        />
+                        <FormulaBox 
+                        title="Juros Compostos (Montante)" 
+                        formula="M = C . (1 + i)^t" 
+                        legend="Cuidado com o tempo (t) como expoente!"
+                        />
+                    </div>
+                    )
+                },
+                {
+                    title: "Funções e Gráficos",
+                    content: (
+                    <div>
+                        <SectionTitle>Funções do 1º e 2º Grau</SectionTitle>
+                        <Paragraph>Interpretação de gráficos é fundamental.</Paragraph>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <SubTitle>Função Afim (1º Grau)</SubTitle>
+                            <FormulaBox formula="f(x) = ax + b" />
+                            <ul className="text-sm space-y-1">
+                                <li><strong>a:</strong> Coeficiente angular (Taxa de variação). Se a &gt; 0 (Crescente), a &lt; 0 (Decrescente).</li>
+                                <li><strong>b:</strong> Coeficiente linear (Onde corta o eixo Y).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <SubTitle>Função Quadrática (2º Grau)</SubTitle>
+                            <FormulaBox formula="f(x) = ax² + bx + c" />
+                            <ul className="text-sm space-y-1">
+                                <li><strong>Concavidade:</strong> a &gt; 0 (Sorriso/Para cima), a &lt; 0 (Triste/Para baixo).</li>
+                                <li><strong>Raízes:</strong> Onde corta o eixo X (Bhaskara).</li>
+                                <li><strong>Vértice:</strong> Ponto máximo ou mínimo.</li>
+                            </ul>
+                        </div>
+                        </div>
+
+                        <FormulaBox 
+                        title="Coordenadas do Vértice" 
+                        formula="Xv = -b/2a | Yv = -Δ/4a" 
+                        legend="Essencial para problemas de 'Lucro Máximo' ou 'Área Máxima'."
+                        />
+                    </div>
+                    )
+                },
+                {
+                    title: "Análise Combinatória",
+                    content: (
+                    <div>
+                        <SectionTitle>Contagem e Probabilidade</SectionTitle>
+                        <Paragraph>Identificar se a <strong>ordem importa</strong> é o segredo.</Paragraph>
+
+                        <div className="grid gap-4 mt-4">
+                        <div className="bg-white p-4 rounded shadow border-l-4 border-indigo-500">
+                            <h4 className="font-bold text-indigo-700 text-lg">Arranjo (Ordem IMPORTA)</h4>
+                            <p className="text-sm">Podium, Senhas, Cargos (Pres. e Vice).</p>
+                            <code className="block bg-gray-100 p-2 mt-2 rounded">A(n,p) = n! / (n-p)!</code>
+                        </div>
+                        
+                        <div className="bg-white p-4 rounded shadow border-l-4 border-purple-500">
+                            <h4 className="font-bold text-purple-700 text-lg">Combinação (Ordem NÃO importa)</h4>
+                            <p className="text-sm">Salada de frutas, Grupos de pessoas, Mega-Sena.</p>
+                            <code className="block bg-gray-100 p-2 mt-2 rounded">C(n,p) = n! / p!(n-p)!</code>
+                        </div>
+
+                        <div className="bg-white p-4 rounded shadow border-l-4 border-pink-500">
+                            <h4 className="font-bold text-pink-700 text-lg">Permutação (Troca de lugares)</h4>
+                            <p className="text-sm">Anagramas, Fila.</p>
+                            <code className="block bg-gray-100 p-2 mt-2 rounded">P = n!</code>
+                            <p className="text-xs text-gray-500 mt-1">Se tiver repetição: divide pelo fatorial das repetições.</p>
+                        </div>
+                        </div>
+                    </div>
+                    )
+                }
+                ]
+            },
+            ciencias: {
+                title: "Física, Química e Biologia",
+                icon: <Beaker className="w-5 h-5" />,
+                color: "bg-green-600",
+                modules: [
+                {
+                    title: "Física: Mecânica",
+                    content: (
+                    <div>
+                        <SectionTitle>Leis de Newton e Cinemática</SectionTitle>
+                        
+                        <SubTitle>As 3 Leis de Newton</SubTitle>
+                        <ol className="list-decimal pl-5 space-y-2 mb-6">
+                        <li><strong>Inércia:</strong> Corpo parado tende a ficar parado. Corpo em movimento (MRU) tende a continuar, a menos que uma força atue.</li>
+                        <li><strong>Princípio Fundamental:</strong> <code className="bg-gray-100 font-bold px-2">Fr = m . a</code> (Força Resultante = massa . aceleração).</li>
+                        <li><strong>Ação e Reação:</strong> Para toda ação existe uma reação de mesmo módulo, mesma direção e sentidos opostos. <em>Nunca se anulam pois atuam em corpos diferentes.</em></li>
+                        </ol>
+
+                        <SubTitle>Energia e Trabalho</SubTitle>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormulaBox formula="Ec = m.v²/2" title="Energia Cinética (Movimento)" />
+                        <FormulaBox formula="Ep = m.g.h" title="Energia Potencial (Altura)" />
+                        </div>
+                        <Paragraph><strong>Conservação da Energia Mecânica:</strong> Em sistemas sem atrito, a energia inicial é igual a final (A montanha russa transforma Potencial em Cinética).</Paragraph>
+                    </div>
+                    )
+                },
+                {
+                    title: "Química: Soluções e Orgânica",
+                    content: (
+                    <div>
+                        <SectionTitle>Química Geral e Orgânica</SectionTitle>
+                        
+                        <SubTitle>Soluções e Concentração</SubTitle>
+                        <Paragraph>Muito cobrado em contextos de poluição ou remédios.</Paragraph>
+                        <FormulaBox title="Concentração Comum" formula="C = m / V" legend="m = massa soluto (g) | V = volume solução (L)" />
+                        <FormulaBox title="Molaridade" formula="M = n / V" legend="n = número de mols | V = volume (L)" />
+
+                        <SubTitle>Química Orgânica (Funções Oxigenadas)</SubTitle>
+                        <div className="space-y-2 text-sm">
+                            <div className="flex items-center p-2 bg-gray-50 rounded">
+                            <span className="font-bold w-24 text-green-700">Álcool</span>
+                            <span>Hidroxila (-OH) em carbono saturado. (Ex: Etanol)</span>
+                            </div>
+                            <div className="flex items-center p-2 bg-gray-50 rounded">
+                            <span className="font-bold w-24 text-green-700">Fenol</span>
+                            <span>Hidroxila (-OH) ligada direto ao anel aromático.</span>
+                            </div>
+                            <div className="flex items-center p-2 bg-gray-50 rounded">
+                            <span className="font-bold w-24 text-green-700">Cetona</span>
+                            <span>Carbonila (C=O) entre carbonos. (Ex: Acetona)</span>
+                            </div>
+                            <div className="flex items-center p-2 bg-gray-50 rounded">
+                            <span className="font-bold w-24 text-green-700">Ác. Carboxílico</span>
+                            <span>Carboxila (-COOH). (Ex: Vinagre/Ác. Acético)</span>
+                            </div>
+                        </div>
+                    </div>
+                    )
+                },
+                {
+                    title: "Biologia: Ecologia e Célula",
+                    content: (
+                    <div>
+                        <SectionTitle>Ecologia: O carro-chefe da Biologia</SectionTitle>
+                        
+                        <SubTitle>Relações Ecológicas</SubTitle>
+                        <div className="grid md:grid-cols-2 gap-4">
+                        <ConceptBox title="Harmônicas (+,+ ou +,0)" color="green">
+                            <ul className="list-disc pl-4 text-xs">
+                            <li><strong>Sociedade:</strong> Mesma espécie, trabalho dividido (Abelhas).</li>
+                            <li><strong>Protocooperação:</strong> Benefício mútuo, não obrigatório (Pássaro-palito e crocodilo).</li>
+                            <li><strong>Mutualismo:</strong> Benefício mútuo, obrigatório (Líquens).</li>
+                            <li><strong>Comensalismo:</strong> Um ganha, outro indiferente (Tubarão e Rêmora).</li>
+                            </ul>
+                        </ConceptBox>
+                        <ConceptBox title="Desarmônicas (+,-)" color="green">
+                            <ul className="list-disc pl-4 text-xs">
+                            <li><strong>Competição:</strong> Disputa por recursos (intra ou interespecífica).</li>
+                            <li><strong>Predatismo:</strong> Um mata o outro para comer.</li>
+                            <li><strong>Parasitismo:</strong> Um vive às custas do outro (Piolho).</li>
+                            <li><strong>Amensalismo:</strong> Um inibe o outro (Fungos Penicillium matando bactérias).</li>
+                            </ul>
+                        </ConceptBox>
+                        </div>
+
+                        <FatecTrap>
+                        Cuidado com <strong>Nicho Ecológico</strong> vs <strong>Habitat</strong>. Habitat é o endereço (onde vive). Nicho é a profissão (o que faz, o que come, como reproduz).
+                        </FatecTrap>
+                    </div>
+                    )
+                }
+                ]
+            },
+            humanas: {
+                title: "História e Geografia",
+                icon: <Globe className="w-5 h-5" />,
+                color: "bg-amber-600",
+                modules: [
+                {
+                    title: "História do Brasil",
+                    content: (
+                    <div>
+                        <SectionTitle>Brasil: Império e República</SectionTitle>
+                        
+                        <SubTitle>Segundo Reinado (D. Pedro II)</SubTitle>
+                        <Paragraph>Período de estabilidade, café como principal produto ("O Vale do Paraíba" e depois "Oeste Paulista").</Paragraph>
+                        <ul className="list-disc pl-5 mb-4">
+                        <li><strong>Guerra do Paraguai:</strong> Fortalecimento do Exército.</li>
+                        <li><strong>Abolicionismo:</strong> Lei Eusébio de Queirós (Fim do tráfico), Ventre Livre, Sexagenários, Áurea (1888).</li>
+                        <li><strong>Imigração:</strong> Substituição da mão de obra escrava pela assalariada europeia (branqueamento).</li>
+                        </ul>
+
+                        <SubTitle>Era Vargas (Detalhada)</SubTitle>
+                        <ConceptBox title="O Pai dos Pobres e Mãe dos Ricos" color="amber">
+                        Vargas criou a CLT, base da indústria (CSN, Petrobras mais tarde), mas governou como ditador no Estado Novo (1937-45). Usou o DIP (Departamento de Imprensa e Propaganda) para censura e culto ao líder.
+                        </ConceptBox>
+                    </div>
+                    )
+                },
+                {
+                    title: "Geografia Física e Geopolítica",
+                    content: (
+                    <div>
+                        <SectionTitle>Geografia Geral e do Brasil</SectionTitle>
+                        
+                        <SubTitle>Biomas Brasileiros</SubTitle>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                            <div className="bg-green-50 p-2 rounded">
+                            <strong>Cerrado:</strong> Savana brasileira, árvores tortuosas, casca grossa, solo ácido (precisa de calagem). Hotspot (muita biodiversidade, muito risco).
+                            </div>
+                            <div className="bg-green-50 p-2 rounded">
+                            <strong>Caatinga:</strong> Exclusivo do BR, semiárido, plantas xerófitas (cactos), rios intermitentes.
+                            </div>
+                            <div className="bg-green-50 p-2 rounded">
+                            <strong>Mata Atlântica:</strong> Resta menos de 12%. Floresta tropical úmida. Litoral.
+                            </div>
+                        </div>
+
+                        <SubTitle>Globalização e Indústria</SubTitle>
+                        <Paragraph>
+                            <strong>DIT (Divisão Internacional do Trabalho):</strong> Países ricos vendem tecnologia; Países pobres vendem commodities.
+                        </Paragraph>
+                        <FatecTrap>
+                            A FATEC adora perguntar sobre <strong>Obsolescência Programada</strong>: produtos feitos para quebrar ou ficarem ultrapassados rápido, girando o consumismo.
+                        </FatecTrap>
+                    </div>
+                    )
+                }
+                ]
+            }
+        };
+
+        const flashcardsData = [
+            { q: "Fórmula de Bhaskara", a: "x = (-b ± √Δ) / 2a" },
+            { q: "Capital do Brasil antes de Brasília", a: "Rio de Janeiro" },
+            { q: "Autores da 1ª fase do Modernismo", a: "Oswald de Andrade, Mário de Andrade, Manuel Bandeira" },
+            { q: "Fórmula da Energia Cinética", a: "Ec = (m . v²) / 2" },
+            { q: "Tríplice Entente (1ª Guerra)", a: "Inglaterra, França e Rússia" },
+            { q: "Organela da respiração celular", a: "Mitocôndria" },
+            { q: "Valor do Seno de 30º", a: "1/2" },
+            { q: "Elemento químico 'Na'", a: "Sódio" },
+            { q: "Quem escreveu 'Vidas Secas'?", a: "Graciliano Ramos" },
+            { q: "Fórmula da 1ª Lei de Ohm", a: "U = R . i" },
+            { q: "O que é Metáfora?", a: "Comparação implícita (sem 'como')" },
+            { q: "Clima predominante no Cerrado", a: "Tropical Sazonal (Verão chuvoso, inverno seco)" }
+        ];
+
+        const quizQuestions = [
+            {
+                question: "O movimento modernista de 1922 teve como marco inicial qual evento?",
+                options: ["Semana de Arte Moderna", "Revolta da Vacina", "Guerra de Canudos", "Manifesto Antropofágico"],
+                correct: 0,
+                explanation: "A Semana de Arte Moderna, realizada no Teatro Municipal de SP em 1922, foi o marco inicial, rompendo com o parnasianismo."
+            },
+            {
+                question: "Na função f(x) = -2x + 4, o gráfico é uma reta:",
+                options: ["Crescente", "Decrescente", "Constante", "Parábola"],
+                correct: 1,
+                explanation: "Como o coeficiente angular 'a' é negativo (-2), a função é decrescente."
+            },
+            {
+                question: "Qual o principal motivo da vinda da Família Real para o Brasil em 1808?",
+                options: ["Descoberta de ouro", "Expansão territorial", "Bloqueio Continental Napoleônico", "Guerra do Paraguai"],
+                correct: 2,
+                explanation: "Dom João VI fugiu de Portugal devido à invasão das tropas de Napoleão, que impôs o Bloqueio Continental à Inglaterra."
+            },
+            {
+                question: "Em Ecologia, a relação onde um organismo se beneficia e o outro é indiferente chama-se:",
+                options: ["Mutualismo", "Parasitismo", "Comensalismo", "Competição"],
+                correct: 2,
+                explanation: "Comensalismo é a relação (+,0). Exemplo clássico: Tubarão e Rêmora (que come os restos)."
+            },
+            {
+                question: "A frase 'O amor é fogo que arde sem se ver' é um exemplo de:",
+                options: ["Metonímia", "Paradoxo", "Antítese", "Hipérbole"],
+                correct: 1,
+                explanation: "É um Paradoxo, pois apresenta uma contradição lógica impossível na realidade (fogo que não se vê, dor que não se sente)."
+            }
+        ];
+
+        const SidebarItem = ({ icon, label, active, onClick }) => (
+            <button 
+                onClick={onClick}
+                className={`w-full flex items-center space-x-3 px-4 py-3 transition-all duration-200 border-l-4
+                ${active ? 'bg-slate-800 text-white border-blue-500' : 'border-transparent text-slate-400 hover:bg-slate-800 hover:text-white'}`}
+            >
+                {icon}
+                <span className="font-medium">{label}</span>
+            </button>
+        );
+
+        const Flashcard = ({ front, back }) => {
+            const [flipped, setFlipped] = useState(false);
+            
+            // Reset flip when content changes
+            useEffect(() => {
+                setFlipped(false);
+            }, [front, back]);
+
+            return (
+                <div 
+                onClick={() => setFlipped(!flipped)}
+                className="h-72 w-full md:w-[500px] perspective cursor-pointer group"
+                >
+                <div className={`relative w-full h-full transition-all duration-500 transform border-2 rounded-2xl shadow-xl flex items-center justify-center p-8 text-center bg-white 
+                    ${flipped ? 'bg-indigo-50 border-indigo-400' : 'border-slate-200 hover:border-indigo-300'}`}>
+                    {!flipped ? (
+                    <div className="flex flex-col items-center">
+                        <div className="bg-indigo-100 p-3 rounded-full mb-4"><Brain className="w-8 h-8 text-indigo-600" /></div>
+                        <h3 className="text-2xl font-bold text-gray-800">{front}</h3>
+                        <p className="text-xs font-bold text-indigo-500 mt-6 uppercase tracking-widest flex items-center">
+                        <RotateCw className="w-3 h-3 mr-1" /> Clique para virar
+                        </p>
+                    </div>
+                    ) : (
+                    <div className="flex flex-col items-center animate-fade-in">
+                        <div className="bg-yellow-100 p-3 rounded-full mb-4"><Lightbulb className="w-8 h-8 text-yellow-600" /></div>
+                        <h3 className="text-2xl font-bold text-indigo-900">{back}</h3>
+                        <p className="text-xs font-bold text-gray-400 mt-6 uppercase tracking-widest">Clique para próxima</p>
+                    </div>
+                    )}
+                </div>
+                </div>
+            );
+        };
+
+        const RedacaoGuide = () => (
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 max-w-5xl mx-auto overflow-hidden">
+                <div className="bg-pink-600 p-8 text-white">
+                <div className="flex items-center space-x-3 mb-2">
+                    <PenTool className="w-8 h-8" />
+                    <h2 className="text-3xl font-bold">Laboratório de Redação</h2>
+                </div>
+                <p className="opacity-90 text-pink-100">O guia definitivo para a dissertação argumentativa da FATEC.</p>
+                </div>
+
+                <div className="p-8 grid md:grid-cols-12 gap-8">
+                {/* Coluna Principal */}
+                <div className="md:col-span-8 space-y-8">
+                    <section>
+                    <SubTitle>O Esqueleto Nota 100</SubTitle>
+                    <div className="space-y-4">
+                        <div className="border-l-4 border-pink-500 bg-pink-50 p-4 rounded-r-lg">
+                        <strong className="text-pink-800 block mb-1">1. Introdução (5-6 linhas)</strong>
+                        <p className="text-sm text-gray-700">
+                            Apresente o tema (Repertório) + Conectivo + Tese (Sua opinião) + 2 Argumentos (Spoiler do que vai vir).
+                            <br/><em className="text-xs text-gray-500">Ex: "A série Black Mirror retrata... Analogamente, no Brasil... Isso ocorre devido à [Arg1] e [Arg2]."</em>
+                        </p>
+                        </div>
+                        <div className="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-lg">
+                        <strong className="text-blue-800 block mb-1">2. Desenvolvimento 1 (7-8 linhas)</strong>
+                        <p className="text-sm text-gray-700">
+                            Tópico Frasal (Retoma Arg1) + Repertório (Dado/Citação) + Explicação + Exemplo Concreto + Fechamento.
+                        </p>
+                        </div>
+                        <div className="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-lg">
+                        <strong className="text-blue-800 block mb-1">3. Desenvolvimento 2 (7-8 linhas)</strong>
+                        <p className="text-sm text-gray-700">
+                            Conectivo (Ademais/Outrossim) + Tópico Frasal (Retoma Arg2) + Aprofundamento (Causa/Consequência).
+                        </p>
+                        </div>
+                        <div className="border-l-4 border-green-500 bg-green-50 p-4 rounded-r-lg">
+                        <strong className="text-green-800 block mb-1">4. Conclusão (5-6 linhas)</strong>
+                        <p className="text-sm text-gray-700">
+                            Conectivo (Portanto) + Retomada da Tese (Com outras palavras) + Solução ou Reflexão Final (Circularidade: volte ao repertório da introdução).
+                        </p>
+                        </div>
+                    </div>
+                    </section>
+                </div>
+
+                {/* Sidebar Redação */}
+                <div className="md:col-span-4 space-y-6">
+                    <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <h4 className="font-bold text-gray-800 mb-3 flex items-center"><Award className="w-4 h-4 mr-2 text-yellow-500"/> Critérios FATEC</h4>
+                    <ul className="space-y-2 text-sm text-gray-600">
+                        <li className="flex justify-between"><span>Tema:</span> <span className="font-bold">20 pts</span></li>
+                        <li className="flex justify-between"><span>Estrutura:</span> <span className="font-bold">20 pts</span></li>
+                        <li className="flex justify-between"><span>Argumentação:</span> <span className="font-bold">20 pts</span></li>
+                        <li className="flex justify-between"><span>Coesão:</span> <span className="font-bold">20 pts</span></li>
+                        <li className="flex justify-between"><span>Norma Culta:</span> <span className="font-bold">20 pts</span></li>
+                    </ul>
+                    </div>
+
+                    <div className="bg-slate-800 text-white p-5 rounded-xl">
+                    <h4 className="font-bold text-yellow-400 mb-3">Conectivos de Ouro</h4>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                        <strong className="block text-gray-400">Oposição</strong>
+                        Contudo, Todavia, Entretanto.
+                        </div>
+                        <div>
+                        <strong className="block text-gray-400">Adição</strong>
+                        Ademais, Outrossim, Além disso.
+                        </div>
+                        <div>
+                        <strong className="block text-gray-400">Conclusão</strong>
+                        Portanto, Destarte, Logo.
+                        </div>
+                        <div>
+                        <strong className="block text-gray-400">Causa</strong>
+                        Visto que, Uma vez que.
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        );
+
+        function FATECMasterClass() {
+            const [currentView, setCurrentView] = useState('dashboard');
+            const [selectedSubject, setSelectedSubject] = useState('portugues');
+            const [activeModuleIndex, setActiveModuleIndex] = useState(0);
+            const [isSidebarOpen, setSidebarOpen] = useState(false);
+            
+            // Quiz State
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [quizScore, setQuizScore] = useState(0);
+            const [showExplanation, setShowExplanation] = useState(false);
+            const [quizCompleted, setQuizCompleted] = useState(false);
+            const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
+
+            // Flashcard Randomizer State
+            const [currentFlashcard, setCurrentFlashcard] = useState(0);
+
+            const handleNextFlashcard = () => {
+                let next = Math.floor(Math.random() * flashcardsData.length);
+                while(next === currentFlashcard) {
+                next = Math.floor(Math.random() * flashcardsData.length);
+                }
+                setCurrentFlashcard(next);
+            };
+
+            const handleQuizAnswer = (optionIndex) => {
+                if (showExplanation) return;
+                const correct = optionIndex === quizQuestions[currentQuestion].correct;
+                if (correct) setQuizScore(prev => prev + 1);
+                setLastAnswerCorrect(correct);
+                setShowExplanation(true);
+            };
+
+            const nextQuestion = () => {
+                setShowExplanation(false);
+                if (currentQuestion < quizQuestions.length - 1) {
+                setCurrentQuestion(prev => prev + 1);
+                } else {
+                setQuizCompleted(true);
+                }
+            };
+
+            const resetQuiz = () => {
+                setCurrentQuestion(0);
+                setQuizScore(0);
+                setQuizCompleted(false);
+                setShowExplanation(false);
+            };
+
+            const renderContent = () => {
+                switch(currentView) {
+                case 'dashboard':
+                    return (
+                    <div className="space-y-8 animate-fade-in pb-10">
+                        {/* Hero Section */}
+                        <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -mr-16 -mt-16"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -ml-16 -mb-16"></div>
+                        
+                        <div className="relative z-10">
+                            <div className="flex items-center space-x-2 mb-4 text-blue-300 font-bold uppercase tracking-wider text-sm">
+                            <GraduationCap className="w-5 h-5" />
+                            <span>Plataforma Premium</span>
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
+                            Sua Aprovação na <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">FATEC</span> Começa Aqui.
+                            </h1>
+                            <p className="text-lg text-slate-300 max-w-2xl mb-8">
+                            Conteúdo aprofundado, focado nas especificidades da banca CPS. Sem resumos rasos. Aqui a gente estuda de verdade.
+                            </p>
+                            <div className="flex flex-wrap gap-4">
+                            <button onClick={() => setCurrentView('subject')} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold transition shadow-lg shadow-blue-900/50 flex items-center">
+                                <BookOpen className="w-5 h-5 mr-2" /> Começar a Estudar
+                            </button>
+                            <button onClick={() => setCurrentView('quiz')} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg font-bold transition backdrop-blur-sm flex items-center">
+                                <CheckCircle className="w-5 h-5 mr-2" /> Testar Nível
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+
+                        {/* Stats / Quick Access */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div onClick={() => setCurrentView('flashcards')} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all cursor-pointer group hover:-translate-y-1">
+                            <div className="flex justify-between items-start mb-4">
+                            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center group-hover:bg-indigo-600 transition-colors">
+                                <Brain className="text-indigo-600 group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-1 rounded-full">Revisão Ativa</span>
+                            </div>
+                            <h3 className="font-bold text-xl text-gray-800">Flashcards</h3>
+                            <p className="text-gray-500 text-sm mt-2">Memorização de fórmulas, datas e conceitos chaves com sistema de repetição.</p>
+                        </div>
+
+                        <div onClick={() => setCurrentView('redacao')} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all cursor-pointer group hover:-translate-y-1">
+                            <div className="flex justify-between items-start mb-4">
+                            <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center group-hover:bg-pink-600 transition-colors">
+                                <PenTool className="text-pink-600 group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="bg-pink-50 text-pink-700 text-xs font-bold px-2 py-1 rounded-full">Nota 100</span>
+                            </div>
+                            <h3 className="font-bold text-xl text-gray-800">Redação Estruturada</h3>
+                            <p className="text-gray-500 text-sm mt-2">Modelos prontos, conectivos e análise dos critérios da banca.</p>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center">
+                            <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-bold text-gray-800">Progresso Geral</h3>
+                            <TrendingUp className="text-green-500 w-5 h-5" />
+                            </div>
+                            <div className="w-full bg-gray-100 rounded-full h-3 mb-4">
+                            <div className="bg-green-500 h-3 rounded-full w-1/4"></div>
+                            </div>
+                            <p className="text-xs text-gray-500">Continue firme! Você já dominou 25% do conteúdo essencial.</p>
+                        </div>
+                        </div>
+                    </div>
+                    );
+
+                case 'subject':
+                    const subject = subjects[selectedSubject];
+                    return (
+                    <div className="h-full flex flex-col md:flex-row gap-6 animate-fade-in pb-10">
+                        {/* Seletor de Matéria (Estilo Cartão) */}
+                        <div className="w-full md:w-72 flex-shrink-0 flex flex-col gap-3">
+                        <h2 className="font-bold text-slate-800 text-lg mb-2 flex items-center">
+                            <Bookmark className="w-5 h-5 mr-2" /> Disciplinas
+                        </h2>
+                        {Object.entries(subjects).map(([key, sub]) => (
+                            <button
+                            key={key}
+                            onClick={() => { setSelectedSubject(key); setActiveModuleIndex(0); }}
+                            className={`group relative w-full text-left p-4 rounded-xl transition-all duration-200 border-2 overflow-hidden
+                                ${selectedSubject === key 
+                                ? 'bg-white border-blue-600 shadow-md' 
+                                : 'bg-white border-transparent hover:border-gray-200'}`}
+                            >
+                            <div className={`absolute left-0 top-0 bottom-0 w-1 ${sub.color}`}></div>
+                            <div className="flex items-center pl-2">
+                                <div className={`p-2 rounded-lg mr-3 ${selectedSubject === key ? sub.color + ' text-white' : 'bg-gray-100 text-gray-500'}`}>
+                                {sub.icon}
+                                </div>
+                                <div>
+                                <span className={`block font-bold ${selectedSubject === key ? 'text-gray-800' : 'text-gray-500'}`}>
+                                    {sub.title.split(",")[0]}
+                                </span>
+                                <span className="text-xs text-gray-400 font-medium">
+                                    {sub.modules.length} Módulos
+                                </span>
+                                </div>
+                            </div>
+                            </button>
+                        ))}
+                        </div>
+
+                        {/* Área de Conteúdo */}
+                        <div className="flex-1 bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden flex flex-col">
+                        <div className={`p-8 ${subject.color} text-white relative overflow-hidden`}>
+                            <div className="absolute right-0 top-0 opacity-10 transform translate-x-10 -translate-y-10 scale-150">
+                            {subject.icon}
+                            </div>
+                            <h2 className="text-3xl font-bold flex items-center relative z-10">
+                            {subject.title}
+                            </h2>
+                            <p className="text-white/80 mt-2 relative z-10 font-medium">Material teórico completo focado na aprovação.</p>
+                        </div>
+                        
+                        <div className="flex flex-col h-full overflow-hidden">
+                            {/* Abas de Navegação Interna */}
+                            <div className="flex gap-2 overflow-x-auto p-4 border-b bg-gray-50 scrollbar-hide">
+                            {subject.modules.map((mod, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setActiveModuleIndex(idx)}
+                                    className={`px-5 py-2.5 rounded-lg whitespace-nowrap text-sm font-bold transition-all border
+                                    ${activeModuleIndex === idx 
+                                        ? 'bg-white text-blue-600 border-gray-200 shadow-sm' 
+                                        : 'bg-transparent text-gray-500 border-transparent hover:bg-gray-200/50'}`}
+                                >
+                                {mod.title}
+                                </button>
+                            ))}
+                            </div>
+
+                            {/* Conteúdo Scrollável */}
+                            <div className="flex-1 overflow-y-auto p-8 bg-white animate-fade-in custom-scrollbar">
+                            <div className="max-w-4xl mx-auto">
+                                {subject.modules[activeModuleIndex].content}
+                            </div>
+                            
+                            {/* Rodapé do Conteúdo */}
+                            <div className="mt-12 pt-8 border-t flex justify-between items-center text-gray-400 text-sm">
+                                <span>FATEC MasterClass Content</span>
+                                <button 
+                                onClick={() => {
+                                    if (activeModuleIndex < subject.modules.length - 1) setActiveModuleIndex(prev => prev + 1);
+                                }}
+                                disabled={activeModuleIndex === subject.modules.length - 1}
+                                className="flex items-center text-blue-600 hover:text-blue-800 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                Próximo Tópico <ChevronRight className="w-4 h-4 ml-1"/>
+                                </button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    );
+
+                case 'flashcards':
+                    return (
+                    <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-8 animate-fade-in pb-10">
+                        <div className="text-center">
+                        <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center mb-2">
+                            <RotateCw className="mr-3 text-indigo-600" /> Memorização Ativa
+                        </h2>
+                        <p className="text-gray-500">Tente responder antes de virar o cartão.</p>
+                        </div>
+                        
+                        <div className="w-full flex justify-center px-4">
+                        <Flashcard 
+                            front={flashcardsData[currentFlashcard].q}
+                            back={flashcardsData[currentFlashcard].a} 
+                        />
+                        </div>
+                        
+                        <button onClick={handleNextFlashcard} className="px-8 py-3 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:shadow-xl transition transform hover:-translate-y-1 font-bold flex items-center">
+                        Próximo Card <ArrowRight className="ml-2 w-5 h-5"/>
+                        </button>
+                    </div>
+                    );
+
+                case 'quiz':
+                    if (quizCompleted) {
+                    return (
+                        <div className="max-w-xl mx-auto bg-white p-10 rounded-3xl shadow-2xl text-center animate-fade-in mt-10 border border-gray-100">
+                        <div className="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <Award className="w-12 h-12 text-yellow-500" />
+                        </div>
+                        <h2 className="text-3xl font-bold text-gray-800 mb-2">Simulado Finalizado!</h2>
+                        <p className="text-gray-600 mb-8 text-lg">
+                            Você acertou <strong className="text-blue-600 text-2xl mx-1">{quizScore}</strong> de <strong>{quizQuestions.length}</strong>
+                        </p>
+                        
+                        <div className="w-full bg-gray-200 rounded-full h-4 mb-8 overflow-hidden">
+                            <div 
+                            className={`h-4 rounded-full transition-all duration-1000 ${quizScore > quizQuestions.length/2 ? 'bg-green-500' : 'bg-orange-500'}`} 
+                            style={{width: `${(quizScore/quizQuestions.length)*100}%`}}
+                            ></div>
+                        </div>
+
+                        <button onClick={resetQuiz} className="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition w-full shadow-lg">
+                            Refazer Simulado
+                        </button>
+                        </div>
+                    );
+                    }
+
+                    const question = quizQuestions[currentQuestion];
+                    return (
+                    <div className="max-w-3xl mx-auto mt-4 animate-fade-in pb-12">
+                        <div className="flex justify-between items-center mb-6">
+                        <span className="text-sm font-bold text-gray-400 tracking-wider">QUESTÃO {currentQuestion + 1} DE {quizQuestions.length}</span>
+                        <div className="flex space-x-1">
+                            {quizQuestions.map((_, idx) => (
+                            <div key={idx} className={`h-2 w-2 rounded-full ${idx === currentQuestion ? 'bg-blue-600' : idx < currentQuestion ? 'bg-blue-200' : 'bg-gray-200'}`}></div>
+                            ))}
+                        </div>
+                        </div>
+
+                        <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 mb-6">
+                        <h3 className="text-xl md:text-2xl font-semibold text-gray-800 leading-relaxed mb-8">{question.question}</h3>
+                        
+                        <div className="space-y-4">
+                            {question.options.map((opt, idx) => (
+                            <button
+                                key={idx}
+                                disabled={showExplanation}
+                                onClick={() => handleQuizAnswer(idx)}
+                                className={`w-full text-left p-5 rounded-xl border-2 transition-all relative group
+                                ${showExplanation 
+                                    ? idx === question.correct 
+                                    ? 'bg-green-50 border-green-500 text-green-900' 
+                                    : idx === quizQuestions[currentQuestion].options.indexOf(opt) && idx !== question.correct 
+                                        ? 'bg-red-50 border-red-200 text-gray-400' 
+                                        : 'bg-white border-gray-100 text-gray-400 opacity-50'
+                                    : 'bg-white border-gray-100 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md'
+                                }
+                                `}
+                            >
+                                <div className="flex items-center">
+                                <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-4 border
+                                    ${showExplanation && idx === question.correct ? 'bg-green-500 border-green-500 text-white' : 'bg-gray-100 border-gray-300 text-gray-500 group-hover:border-blue-400 group-hover:text-blue-500'}
+                                `}>
+                                    {String.fromCharCode(65 + idx)}
+                                </span>
+                                <span className="font-medium text-lg">{opt}</span>
+                                </div>
+                                {showExplanation && idx === question.correct && <CheckCircle className="absolute right-5 top-5 text-green-600 w-6 h-6"/>}
+                            </button>
+                            ))}
+                        </div>
+                        </div>
+
+                        {showExplanation && (
+                        <div className={`p-6 rounded-2xl mb-8 border-l-4 shadow-sm animate-fade-in ${lastAnswerCorrect ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}>
+                            <div className="flex items-center mb-3">
+                            {lastAnswerCorrect ? <CheckCircle className="text-green-600 mr-2 w-6 h-6"/> : <AlertCircle className="text-red-600 mr-2 w-6 h-6"/>}
+                            <strong className={`text-lg ${lastAnswerCorrect ? 'text-green-800' : 'text-red-800'}`}>
+                                {lastAnswerCorrect ? 'Resposta Correta!' : 'Resposta Incorreta'}
+                            </strong>
+                            </div>
+                            <p className="text-gray-700 leading-relaxed">{question.explanation}</p>
+                        </div>
+                        )}
+
+                        {showExplanation && (
+                        <div className="flex justify-end">
+                            <button onClick={nextQuestion} className="flex items-center bg-slate-900 text-white px-8 py-4 rounded-xl hover:bg-slate-800 transition font-bold shadow-lg hover:-translate-y-1">
+                            {currentQuestion < quizQuestions.length - 1 ? 'Próxima Questão' : 'Ver Resultado Final'} <ArrowRight className="ml-2 w-5 h-5" />
+                            </button>
+                        </div>
+                        )}
+                    </div>
+                    );
+
+                case 'redacao':
+                    return <div className="animate-fade-in pb-10"><RedacaoGuide /></div>;
+
+                default:
+                    return <div>Selecione uma opção</div>;
+                }
+            };
+
+            return (
+                <div className="flex h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden selection:bg-blue-200">
+                {/* Mobile Sidebar Overlay */}
+                {isSidebarOpen && (
+                    <div 
+                    className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-40 md:hidden transition-opacity"
+                    onClick={() => setSidebarOpen(false)}
+                    />
+                )}
+
+                {/* Main Sidebar */}
+                <aside className={`
+                    fixed md:relative z-50 w-72 h-full bg-slate-900 text-white transform transition-transform duration-300 ease-in-out shadow-2xl flex flex-col border-r border-slate-800
+                    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+                `}>
+                    <div className="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-950">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight text-white flex items-center">
+                        <GraduationCap className="w-6 h-6 mr-2 text-blue-500"/>
+                        FATEC
+                        </h1>
+                        <p className="text-xs text-blue-400 font-bold uppercase tracking-[0.2em] mt-1 ml-8">MasterClass</p>
+                    </div>
+                    <button onClick={() => setSidebarOpen(false)} className="md:hidden text-slate-400 hover:text-white">
+                        <X size={24} />
+                    </button>
+                    </div>
+
+                    <nav className="flex-1 overflow-y-auto py-6 space-y-1">
+                    <SidebarItem 
+                        icon={<Search size={20} />} 
+                        label="Dashboard" 
+                        active={currentView === 'dashboard'} 
+                        onClick={() => { setCurrentView('dashboard'); setSidebarOpen(false); }}
+                    />
+                    
+                    <div className="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-widest mt-6 mb-2">Área de Estudo</div>
+                    <SidebarItem 
+                        icon={<BookOpen size={20} />} 
+                        label="Apostila Completa" 
+                        active={currentView === 'subject'} 
+                        onClick={() => { setCurrentView('subject'); setSidebarOpen(false); }}
+                    />
+                    <SidebarItem 
+                        icon={<PenTool size={20} />} 
+                        label="Laboratório Redação" 
+                        active={currentView === 'redacao'} 
+                        onClick={() => { setCurrentView('redacao'); setSidebarOpen(false); }}
+                    />
+                    
+                    <div className="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-widest mt-6 mb-2">Treinamento</div>
+                    <SidebarItem 
+                        icon={<CheckCircle size={20} />} 
+                        label="Simulado FATEC" 
+                        active={currentView === 'quiz'} 
+                        onClick={() => { setCurrentView('quiz'); setSidebarOpen(false); }}
+                    />
+                    <SidebarItem 
+                        icon={<Brain size={20} />} 
+                        label="Flashcards (Memória)" 
+                        active={currentView === 'flashcards'} 
+                        onClick={() => { setCurrentView('flashcards'); setSidebarOpen(false); }}
+                    />
+                    </nav>
+
+                    <div className="p-6 bg-slate-950 border-t border-slate-800">
+                    <div className="flex items-center space-x-4 bg-slate-800 p-3 rounded-lg border border-slate-700">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center font-bold text-white shadow-lg">VF</div>
+                        <div>
+                        <p className="text-sm font-bold text-white">Vestibulando</p>
+                        <p className="text-xs text-green-400 flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span> Online</p>
+                        </div>
+                    </div>
+                    </div>
+                </aside>
+
+                {/* Main Content Wrapper */}
+                <main className="flex-1 flex flex-col h-full w-full relative bg-slate-50">
+                    {/* Mobile Header */}
+                    <header className="md:hidden h-16 bg-white border-b flex items-center px-4 justify-between flex-shrink-0 z-10 shadow-sm">
+                    <button onClick={() => setSidebarOpen(true)} className="text-slate-700 hover:bg-gray-100 p-2 rounded-lg transition">
+                        <Menu size={24} />
+                    </button>
+                    <span className="font-bold text-slate-800 flex items-center"><GraduationCap className="w-5 h-5 mr-2 text-blue-600"/> MasterClass</span>
+                    <div className="w-8"></div>
+                    </header>
+
+                    {/* Scrollable Content Area */}
+                    <div className="flex-1 overflow-y-auto p-4 md:p-8 relative custom-scrollbar">
+                    {renderContent()}
+                    </div>
+                </main>
+                
+                {/* Styles */}
+                <style>{`
+                    @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                    }
+                    .animate-fade-in {
+                    animation: fadeIn 0.4s ease-out forwards;
+                    }
+                    .perspective {
+                    perspective: 1000px;
+                    }
+                `}</style>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<FATECMasterClass />);
+    </script>
+</body>
+</html>
