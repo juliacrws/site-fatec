@@ -2,6 +2,8 @@
 
 Uma "Enciclopédia de Bolso" interativa e moderna focada na aprovação de estudantes no vestibular da FATEC (Centro Paula Souza).
 
+Acesse aqui! (https://fatec-site.netlify.app/)
+
 📖 Sobre o Projeto
 
 O FATEC MasterClass é uma aplicação web desenvolvida para simular um ambiente de aprendizado (LMS) robusto. O objetivo foi criar uma ferramenta que não apenas lista tópicos, mas ensina através de uma interface rica, cobrindo as principais matérias do edital com profundidade teórica e recursos de estudo ativo.
